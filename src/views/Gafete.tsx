@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Printer, IdCard, QrCode, Mail, Twitter, Briefcase, ArrowLeft, MapPin, Calendar, Hash } from "lucide-react";
+import { apiGet } from "../api/api";
+import { resolveMedia } from "../api/api";
+
 
 type Participante = {
   id: string | number;
@@ -17,7 +20,7 @@ export const Gafete = () => {
   const [p, setP] = useState<Participante | null>(null);
 
   useEffect(() => {
-    fetch(`/api/participante/${id}`).then(r=>r.json()).then(setP).catch(()=>setP(null));
+    apiGet<Participante>(`/api/participante/${id}`).then(setP).catch(() => setP(null));
   }, [id]);
 
   if (!p) return (
@@ -77,10 +80,10 @@ export const Gafete = () => {
           <div className="p-4 sm:p-6 space-y-3 sm:space-y-4 flex-1">
             <div className="flex gap-3 sm:gap-4">
               <img
-                src={p.avatar}
+                src={resolveMedia(p.avatar)}
                 onError={(e) => { (e.currentTarget as HTMLImageElement).src = "https://placehold.co/600x600?text=Avatar"; }}
-                className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg ring-2 sm:ring-4 ring-slate-200 shrink-0"
-                alt=""
+                alt={`${p.nombre} ${p.apellidos}`}
+                className="w-full aspect-square object-cover rounded-lg"
               />
               <div className="flex-1 space-y-1 min-w-0">
                 <p className="text-base sm:text-xl font-bold text-slate-900 leading-tight truncate">{p.nombre}</p>

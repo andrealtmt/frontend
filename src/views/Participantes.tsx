@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Search, UserPlus, Briefcase, Twitter } from "lucide-react";
+import { apiGet } from "../api/api";
+import { resolveMedia } from "../api/api";
 
 type Participante = {
   id: string | number;
@@ -17,7 +19,7 @@ export const Participantes = () => {
 
   useEffect(() => {
     const url = q ? `/api/listado?q=${encodeURIComponent(q)}` : "/api/listado";
-    fetch(url).then(r => r.json()).then(setData).catch(() => setData([]));
+    apiGet<Participante[]>(url).then(setData).catch(() => setData([]));
   }, [q]);
 
   return (
@@ -76,12 +78,12 @@ export const Participantes = () => {
                 className="w-full"
                 title="Ver gafete"
               >
-                <img
-                  src={p.avatar}
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = "https://placehold.co/600x600?text=Avatar"; }}
-                  alt={`${p.nombre} ${p.apellidos}`}
-                  className="w-full aspect-square object-cover rounded-lg"
-                />
+              <img
+                src={resolveMedia(p.avatar)}
+                onError={(e) => { (e.currentTarget as HTMLImageElement).src = "https://placehold.co/600x600?text=Avatar"; }}
+                alt={`${p.nombre} ${p.apellidos}`}
+                className="w-full aspect-square object-cover rounded-lg"
+              />
               </button>
               <div className="space-y-1.5 sm:space-y-2">
                 <h3 className="text-sm sm:text-base font-semibold text-slate-800 line-clamp-2">

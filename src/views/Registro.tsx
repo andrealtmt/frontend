@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { User, Mail, Twitter, Briefcase, Image, Save, X, Upload } from "lucide-react";
+import { apiUrl } from "../api/api";
 
 export const Registro = () => {
   const [acepto, setAcepto] = useState(false);
@@ -25,14 +26,18 @@ export const Registro = () => {
 
     setLoading(true);
     const fd = new FormData(e.currentTarget);
-    
-    const res = await fetch("/api/registro", {
-      method: "POST",
-      body: fd,
-    });
-    setLoading(false);
-    if (res.ok) window.location.href = "/participantes";
-    else alert("Error al registrar");
+
+    fd.set("aceptoTerminos", "true");
+
+    try {
+      const res = await fetch(apiUrl("/api/registro"), { method: "POST", body: fd });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      window.location.href = "/participantes";
+    } catch (err) {
+      alert(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
