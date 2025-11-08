@@ -83,7 +83,7 @@ export const Gafete = () => {
                 src={resolveMedia(p.avatar)}
                 onError={(e) => { (e.currentTarget as HTMLImageElement).src = "https://placehold.co/600x600?text=Avatar"; }}
                 alt={`${p.nombre} ${p.apellidos}`}
-                className="w-full aspect-square object-cover rounded-lg"
+                className="w-50 h-50 sm:w-50 sm:h-50 object-cover rounded-lg ring-2 sm:ring-4 ring-slate-200 shrink-0"
               />
               <div className="flex-1 space-y-1 min-w-0">
                 <p className="text-base sm:text-xl font-bold text-slate-900 leading-tight truncate">{p.nombre}</p>
